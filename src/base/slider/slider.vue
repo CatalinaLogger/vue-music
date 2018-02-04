@@ -5,6 +5,7 @@
       </slot>
     </div>
     <div class="dots">
+      <span class="dot" :class="{active: currentPageIndex === index}" v-for="(item, index) in dots"></span>
     </div>
   </div>
 </template>
@@ -14,6 +15,12 @@
   import {addClass} from 'common/js/dom'
 
   export default {
+    data() {
+      return {
+        dots: [],
+        currentPageIndex: 0
+      }
+    },
     props: {
       loop: {
         type: Boolean,
@@ -31,11 +38,27 @@
     mounted() {
       setTimeout(() => {
         this._setSliderWidth()
+        this._initDots()
         this._initSlider()
+
+        if (this.autoPlay) {
+          this._play()
+        }
       }, 20)
+
+      window.addEventListener('resize', () => {
+        if (!this.slider) {
+          return
+        }
+        this._setSliderWidth(true)
+        this.slider.refresh()
+      })
+    },
+    beforeDestroy() {
+      clearTimeout(this.timer)
     },
     methods: {
-      _setSliderWidth() {
+      _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
 
         let width = 0
@@ -48,7 +71,7 @@
           width += sliderWidth
         }
 
-        if (this.loop) {
+        if (this.loop && !isResize) {
           width += 2 * sliderWidth
         }
         this.$refs.sliderGroup.style.width = width + 'px'
@@ -58,12 +81,30 @@
           scrollX: true,
           scrollY: false,
           momentum: false,
-          snap: true,
-          snapLoop: this.loop,
-          snapThreshold: 0.3,
-          snapSpeed: 400,
-          click: true
+          click: true,
+          snap: {
+            loop: this.loop,
+            thead: 0.3,
+            speed: 400
+          }
         })
+        this.slider.on('scrollEnd', () => {
+          let pageIndex = this.slider.getCurrentPage().pageX
+          this.currentPageIndex = pageIndex
+
+          if (this.autoPlay) {
+            this._play()
+          }
+        })
+      },
+      _play() {
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          this.slider.next()
+        }, this.interval)
+      },
+      _initDots() {
+        this.dots = new Array(this.children.length)
       }
     }
   }
