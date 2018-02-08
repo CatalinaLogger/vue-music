@@ -67,7 +67,7 @@
         })
       },
       loadImage() {
-        if (this.checkLoaded) {
+        if (!this.checkLoaded) {
           this.$refs.scroll.refresh()
           this.checkLoaded = true
         }
