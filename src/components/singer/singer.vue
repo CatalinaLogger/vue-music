@@ -5,8 +5,8 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import { getSingerList } from 'api/singer'
-import { ERR_OK } from 'api/config'
+import {getSingerList} from 'api/singer'
+import {ERR_OK} from 'api/config'
 import Singer from 'common/js/singer'
 import ListView from 'base/Listview/listview'
 import {mapMutations} from 'vuex'
@@ -31,6 +31,7 @@ export default {
       this.$router.push({
         path: `/singer/${singer.id}`
       })
+
       this.setSinger(singer)
     },
     _getSingerList() {
