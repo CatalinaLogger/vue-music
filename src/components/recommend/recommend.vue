@@ -45,15 +45,15 @@
 
   export default {
     mixins: [playlistMixin],
+    created() {
+      this._getRecommend()
+      this._getDiscList()
+    },
     data() {
       return {
         recommends: [],
         discList: []
       }
-    },
-    created() {
-      this._getRecommend()
-      this._getDiscList()
     },
     methods: {
       handlePlaylist(playList) {

@@ -101,6 +101,9 @@
   const transitionDuration = prefixStyle('transitionDuration')
 
   export default {
+    created() {
+      this.touch = {}
+    },
     data() {
       return {
         songReady: false,
@@ -111,11 +114,6 @@
         playingLyric: '',
         radius: 32
       }
-    },
-    components: {
-      ProgressBar,
-      ProgressCircle,
-      Scroll
     },
     computed: {
       iconMode() {
@@ -145,9 +143,6 @@
         'mode',
         'sequenceList'
       ])
-    },
-    created() {
-      this.touch = {}
     },
     methods: {
       back() {
@@ -419,6 +414,11 @@
           newPalying ? audio.play() : audio.pause()
         })
       }
+    },
+    components: {
+      ProgressBar,
+      ProgressCircle,
+      Scroll
     }
   }
 </script>

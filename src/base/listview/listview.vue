@@ -34,12 +34,11 @@
   const ANCHOR_HEIGHT = 18
 
   export default {
-    data() {
-      return {
-        scrollY: -1,
-        currentIndex: 0,
-        diff: -1
-      }
+    created() {
+      this.touch = {}
+      this.listenScroll = true
+      this.listHeight = []
+      this.probeType = 3
     },
     props: {
       data: {
@@ -47,15 +46,25 @@
         default: []
       }
     },
-    components: {
-      Scroll,
-      Loading
+    data() {
+      return {
+        scrollY: -1,
+        currentIndex: 0,
+        diff: -1
+      }
     },
-    created() {
-      this.touch = {}
-      this.listenScroll = true
-      this.listHeight = []
-      this.probeType = 3
+    computed: {
+      shortcutList() {
+        return this.data.map((group) => {
+          return group.title.substr(0, 1)
+        })
+      },
+      fixedTitle() {
+        if (this.scrollY > 0) {
+          return ''
+        }
+        return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
+      }
     },
     methods: {
       selectItem(item) {
@@ -105,19 +114,6 @@
         this.$refs.listview.scrollToElement(this.$refs.listgroup[index], 0)
       }
     },
-    computed: {
-      shortcutList() {
-        return this.data.map((group) => {
-          return group.title.substr(0, 1)
-        })
-      },
-      fixedTitle() {
-        if (this.scrollY > 0) {
-          return ''
-        }
-        return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
-      }
-    },
     watch: {
       data() {
         setTimeout(() => {
@@ -152,6 +148,10 @@
         this.fixedTop = fixedTop
         this.$refs.fixed.style.transform = `translate3d(0, ${fixedTop}px, 0)`
       }
+    },
+    components: {
+      Scroll,
+      Loading
     }
   }
 </script>

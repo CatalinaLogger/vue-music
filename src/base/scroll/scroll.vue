@@ -26,11 +26,6 @@
         default: false
       }
     },
-    mounted() {
-      setTimeout(() => {
-        this._initScroll()
-      }, 20)
-    },
     methods: {
       _initScroll() {
         if (!this.$refs.wrapper) {
@@ -63,6 +58,11 @@
       scrollToElement() {
         this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
       }
+    },
+    mounted() {
+      setTimeout(() => {
+        this._initScroll()
+      }, 20)
     },
     watch: {
       data() {

@@ -19,14 +19,14 @@
   const progressBtnWidth = 16
 
   export default {
+    created() {
+      this.touch = {}
+    },
     props: {
       percent: {
         tppe: Number,
         default: 0
       }
-    },
-    created() {
-      this.touch = {}
     },
     methods: {
       progressTouchStart(e) {

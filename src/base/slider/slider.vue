@@ -15,12 +15,6 @@
   import {addClass} from 'common/js/dom'
 
   export default {
-    data() {
-      return {
-        dots: [],
-        currentPageIndex: 0
-      }
-    },
     props: {
       loop: {
         type: Boolean,
@@ -35,35 +29,11 @@
         default: 4000
       }
     },
-    mounted() {
-      setTimeout(() => {
-        this._setSliderWidth()
-        this._initDots()
-        this._initSlider()
-
-        if (this.autoPlay) {
-          this._play()
-        }
-      }, 20)
-
-      window.addEventListener('resize', () => {
-        if (!this.slider) {
-          return
-        }
-        this._setSliderWidth(true)
-        this.slider.refresh()
-      })
-    },
-    activated() {
-      if (this.autoPlay) {
-        this._play()
+    data() {
+      return {
+        dots: [],
+        currentPageIndex: 0
       }
-    },
-    deactivated() {
-      clearTimeout(this.timer)
-    },
-    beforeDestroy() {
-      clearTimeout(this.timer)
     },
     methods: {
       _setSliderWidth(isResize) {
@@ -119,6 +89,36 @@
       _initDots() {
         this.dots = new Array(this.children.length)
       }
+    },
+    mounted() {
+      setTimeout(() => {
+        this._setSliderWidth()
+        this._initDots()
+        this._initSlider()
+
+        if (this.autoPlay) {
+          this._play()
+        }
+      }, 20)
+
+      window.addEventListener('resize', () => {
+        if (!this.slider) {
+          return
+        }
+        this._setSliderWidth(true)
+        this.slider.refresh()
+      })
+    },
+    activated() {
+      if (this.autoPlay) {
+        this._play()
+      }
+    },
+    deactivated() {
+      clearTimeout(this.timer)
+    },
+    beforeDestroy() {
+      clearTimeout(this.timer)
     }
   }
 </script>

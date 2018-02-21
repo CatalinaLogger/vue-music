@@ -12,6 +12,9 @@
   import {ERR_OK} from 'api/config'
 
   export default {
+    created() {
+      this._getSongList()
+    },
     data() {
       return {
         songs: []
@@ -27,12 +30,6 @@
       ...mapGetters([
         'disc'
       ])
-    },
-    created() {
-      this._getSongList()
-    },
-    components: {
-      MusicList
     },
     methods: {
       _getSongList() {
@@ -54,6 +51,9 @@
         })
         return ret
       }
+    },
+    components: {
+      MusicList
     }
   }
 </script>

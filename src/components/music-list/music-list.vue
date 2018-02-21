@@ -16,7 +16,7 @@
     <div class="bg-layer" ref="layer"></div>
     <scroll :data="songs" class="list" ref="list" :probeType="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="selectItem"></song-list>
+        <song-list :rank="rank" :songs="songs" @select="selectItem"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
         <loading></loading>
@@ -39,6 +39,10 @@
 
   export default {
     mixins: [playlistMixin],
+    created() {
+      this.probeType = 3
+      this.listenScroll = true
+    },
     props: {
       songs: {
         type: Array,
@@ -51,17 +55,16 @@
       bgImage: {
         type: String,
         default: ''
+      },
+      rank: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
       return {
         scrollY: 0
       }
-    },
-    components: {
-      Scroll,
-      SongList,
-      Loading
     },
     computed: {
       bgStyle() {
@@ -125,14 +128,15 @@
         this.$refs.bgImage.style[transform] = `scale(${scale})`
       }
     },
-    created() {
-      this.probeType = 3
-      this.listenScroll = true
-    },
     mounted() {
       this.imageHeight = this.$refs.bgImage.clientHeight
       this.minTranslateY = -this.imageHeight + RESERVED_HEIGHT
       this.$refs.list.$el.style.top = `${this.imageHeight}px`
+    },
+    components: {
+      Scroll,
+      SongList,
+      Loading
     }
   }
 </script>

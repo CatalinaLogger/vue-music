@@ -17,16 +17,13 @@ const HOT_SINGER_LEN = 10
 
 export default {
   mixins: [playlistMixin],
+  created() {
+    this._getSingerList()
+  },
   data() {
     return {
       singers: []
     }
-  },
-  components: {
-    ListView
-  },
-  created() {
-    this._getSingerList()
   },
   methods: {
     handlePlaylist(playList) {
@@ -93,6 +90,9 @@ export default {
     ...mapMutations({
       setSinger: 'SET_SINGER'
     })
+  },
+  components: {
+    ListView
   }
 }
 </script>
