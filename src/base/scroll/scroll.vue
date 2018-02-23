@@ -24,6 +24,14 @@
       listenScroll: {
         type: Boolean,
         default: false
+      },
+      pullup: {
+        type: Boolean,
+        default: false
+      },
+      beforeScroll: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
@@ -42,6 +50,20 @@
             me.$emit('scroll', pos)
           })
         }
+
+        if (this.pullup) {
+          this.scroll.on('scrollEnd', () => {
+            if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+              this.$emit('scrollToEnd')
+            }
+          })
+        }
+
+        if (this.beforeScroll) {
+          this.scroll.on('beforeScrollStart', () => {
+            this.$emit('beforeScroll')
+          })
+        }
       },
       enable() {
         this.scroll && this.scroll.enable()
@@ -52,7 +74,7 @@
       refresh() {
         this.scroll && this.scroll.refresh()
       },
-      scroolTo() {
+      scrollTo() {
         this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
       },
       scrollToElement() {

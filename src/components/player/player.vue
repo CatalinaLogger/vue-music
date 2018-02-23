@@ -311,8 +311,7 @@
           let lineEl = this.$refs.lyricLine[lineNum - 5]
           this.$refs.lyricList.scrollToElement(lineEl, 1000)
         } else {
-          let lineEl = this.$refs.lyricLine[0]
-          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+          this.$refs.lyricList.scrollTo(0, 0, 1000)
         }
         this.playingLyric = txt
       },
