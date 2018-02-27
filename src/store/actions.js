@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
 import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
-import {saveSearch, deleteSearch, clearSearch} from 'common/js/cache'
+import {saveSearch, deleteSearch, clearSearch, savePlay, saveFavorite, deleteFavorite} from 'common/js/cache'
 
 export const selectPlay = function ({commit, state}, {list, index}) {
   commit(types.SET_SEQUENCE_LIST, list)
@@ -42,7 +42,7 @@ export const insertSong = function ({commit, state}, song) {
   // 如果已经存在这首歌
   if (fpIndex > -1) {
     // 如果当前插入的索引大于已存在歌曲的索引
-    if (currentSong > fpIndex) {
+    if (currentIndex > fpIndex) {
       playList.splice(fpIndex, 1)
       currentIndex--
     } else {
@@ -68,6 +68,31 @@ export const insertSong = function ({commit, state}, song) {
   commit(types.SET_PLAYING, true)
 }
 
+export const deleteSong = function({commit, state}, song) {
+  let playList = state.playList.slice()
+  let sequenceList = state.sequenceList.slice()
+  let currentIndex = state.currentIndex
+  let pIndex = findIndex(playList, song)
+  playList.splice(pIndex, 1)
+  let sIndex = findIndex(sequenceList, song)
+  sequenceList.splice(sIndex, 1)
+  if (currentIndex > pIndex || currentIndex === playList.length) {
+    currentIndex--
+  }
+  commit(types.SET_PLAY_LIST, playList)
+  commit(types.SET_SEQUENCE_LIST, sequenceList)
+  commit(types.SET_CURRENT_INDEX, currentIndex)
+  const playing = playList.length > 0
+  commit(types.SET_PLAYING, playing)
+}
+
+export const deleteSongList = function({commit}) {
+  commit(types.SET_PLAY_LIST, [])
+  commit(types.SET_SEQUENCE_LIST, [])
+  commit(types.SET_CURRENT_INDEX, -1)
+  commit(types.SET_PLAYING, false)
+}
+
 export const saveSearchHistory = function ({commit}, query) {
   commit(types.SET_SEARCH_HISTORY, saveSearch(query))
 }
@@ -78,6 +103,18 @@ export const deleteSearchHistory = function ({commit}, query) {
 
 export const clearSearchHistory = function ({commit}) {
   commit(types.SET_SEARCH_HISTORY, clearSearch())
+}
+
+export const savePlayHistory = function ({commit}, song) {
+  commit(types.SET_PLAY_HISTORY, savePlay(song))
+}
+
+export const saveFavoriteList = function ({commit}, song) {
+  commit(types.SET_FAVORITE_LIST, saveFavorite(song))
+}
+
+export const deleteFavoriteList = function ({commit}, song) {
+  commit(types.SET_FAVORITE_LIST, deleteFavorite(song))
 }
 
 function findIndex(list, song) {
